@@ -3,12 +3,12 @@ kind: Deployment
 metadata:
   name: {{ .Values.name }}
   labels:
-    {{- include "authoritative-dns.selectorLabels" . | nindent 4 }}
+    {{- include "kubernetes-bind.selectorLabels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "authoritative-dns.selectorLabels" . | nindent 6 }}
+      {{- include "kubernetes-bind.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       roll: {{ randAlphaNum 5 | quote }}
@@ -17,7 +17,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "authoritative-dns.selectorLabels" . | nindent 8 }}
+        {{- include "kubernetes-bind.selectorLabels" . | nindent 8 }}
     spec:
       hostNetwork: true
       affinity:

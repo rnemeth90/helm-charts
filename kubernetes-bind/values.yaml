@@ -1,6 +1,6 @@
 replicaCount: 2
 region: ORD1
-name: authoritative-dns
+name: kubernetes-bind
 image:
   image: internetsystemsconsortium/bind9
   pullPolicy: IfNotPresent
@@ -26,17 +26,17 @@ livenessProbe:
   enabled: true
 
 bindzones:
-  c00lz0ne.internal: |
+  mydnszone.internal: |
           604800
-      @       IN      SOA     ns1.c00lz0ne.internal. admin.c00lz0ne.internal. (
+      @       IN      SOA     ns1.mydnszone.internal. admin.mydnszone.internal. (
                                     5         ; Serial
                                604800         ; Refresh
                                 86400         ; Retry
                               2419200         ; Expire
                                604800 )       ; Negative Cache TTL
       ;
-      c00lz0ne.internal.       IN      NS      ns1.c00lz0ne.internal.
-      c00lz0ne.internal.       IN      NS      ns2.c00lz0ne.internal.
+      mydnszone.internal.       IN      NS      ns1.mydnszone.internal.
+      mydnszone.internal.       IN      NS      ns2.mydnszone.internal.
       ns1                      IN      A       10.24.0.11
       ns2                      IN      A       10.24.0.12
       rke00.mgr                IN      A       10.24.0.99
@@ -49,9 +49,9 @@ bindconfig:
             directory "/var/cache/bind";
             listen-on port 53 { any; };
             auth-nxdomain yes;
-            forwarders { 
-                    1.1.1.1; 
-                    1.0.0.1; 
+            forwarders {
+                    1.1.1.1;
+                    1.0.0.1;
             };
             listen-on-v6 { ::1; };
             allow-recursion {
@@ -65,12 +65,12 @@ bindconfig:
             };
     };
 
-    zone "c00lz0ne.internal" {
+    zone "mydnszone.internal" {
       type master;
-      file "/var/lib/bind/c00lz0ne.internal";
+      file "/var/lib/bind/mydnszone.internal";
     };
 
 zoneconfigs:
-  items:                 
-  - key: c00lz0ne.internal
-    path: c00lz0ne.internal
+  items:
+  - key: mydnszone.internal
+    path: mydnszone.internal
