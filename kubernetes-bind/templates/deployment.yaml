@@ -11,7 +11,7 @@ spec:
       {{- include "kubernetes-bind.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      roll: {{ randAlphaNum 5 | quote }}
+      # roll: {{ randAlphaNum 5 | quote }}
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
