@@ -1,40 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "kubernetes-bind.name" . }}-tcp
+  name: {{ include "bind9.fullname" . }}
   labels:
-    {{- include "kubernetes-bind.labels" . | nindent 4 }}
-  {{- if .Values.service.annotations }}
-  annotations:
-    {{- toYaml .Values.service.annotations | nindent 4 }}
-  {{- end }}
+    {{- include "bind9.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
-  externalTrafficPolicy: Local
   ports:
-    - port: {{ .Values.service.targetPort }}
-      targetPort: {{ .Values.service.targetPort }}
+    - port: {{ .Values.service.port }}
+      targetPort: http
       protocol: TCP
-      name: dns-tcp
+      name: http
   selector:
-    {{- include "kubernetes-bind.selectorLabels" . | nindent 4 }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "kubernetes-bind.name" . }}-udp
-  labels:
-    {{- include "kubernetes-bind.labels" . | nindent 4 }}
-  {{- if .Values.service.annotations }}
-  annotations:
-    {{- toYaml .Values.service.annotations | nindent 4 }}
-  {{- end }}
-spec:
-  type: {{ .Values.service.type }}
-  ports:
-    - port: {{ .Values.service.targetPort }}
-      targetPort: {{ .Values.service.targetPort }}
-      protocol: UDP
-      name: dns-udp
-  selector:
-    {{- include "kubernetes-bind.selectorLabels" . | nindent 4 }}
+    {{- include "bind9.selectorLabels" . | nindent 4 }}

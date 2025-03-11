@@ -1,67 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Values.name }}
+  name: {{ include "bind9.fullname" . }}
   labels:
-    {{- include "kubernetes-bind.selectorLabels" . | nindent 4 }}
+    {{- include "bind9.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "kubernetes-bind.selectorLabels" . | nindent 6 }}
+      app: bind9
   template:
     metadata:
-      # roll: {{ randAlphaNum 5 | quote }}
-      {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
-        {{- include "kubernetes-bind.selectorLabels" . | nindent 8 }}
+        app: bind9
     spec:
-      hostNetwork: true
-      affinity:
-        {{- toYaml .Values.affinity | nindent 8 }}
       containers:
-        - name: {{ .Values.name }}-bind
-          image: {{ .Values.image.image }}:{{ .Values.image.tag }}
-          imagePullPolicy: IfNotPresent
-          ports:
-            - name: dns-tcp
-              containerPort: {{ .Values.service.targetPort }}
-              protocol: TCP
-            - name: dns-udp
-              containerPort: {{ .Values.service.targetPort }}
-              protocol: UDP
-          {{- if .Values.readinessProbe.enabled }}
-          readinessProbe:
-            tcpSocket:
-              port: dns-tcp
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          {{- end }}
-          {{- if .Values.readinessProbe.enabled }}
-          livenessProbe:
-            tcpSocket:
-              port: dns-udp
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          {{- end }}
-          resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          volumeMounts:
-          - name: bind-config
-            mountPath: /etc/bind
-          - name: bind-zone-config
-            mountPath: /var/lib/bind
+      - name: bind9
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 53
+          protocol: UDP
+        - containerPort: 53
+          protocol: TCP
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/bind
+        - name: data-volume
+          mountPath: /var/cache/bind
       volumes:
-        - name: bind-config
-          configMap:
-            name: bind-config
-            items:
-              - key: named.conf
-                path: named.conf
-        - name: bind-zone-config
-          configMap:
-            name: bind-zone-config
-{{- toYaml .Values.zoneconfigs | nindent 12 }}
+      - name: config-volume
+        configMap:
+          name: {{ include "bind9.fullname" . }}-config
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: {{ include "bind9.fullname" . }}-pvc
+

@@ -1,76 +1,54 @@
-replicaCount: 2
-# region: ORD1
-name: bind
-image:
-  image: internetsystemsconsortium/bind9
-  pullPolicy: IfNotPresent
-  tag: 9.16
+replicaCount: 1
 
-imageConfig:
+autoscaling:
+  enabled: false
+
+image:
+  repository: ryannemeth/bind9
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 53
   targetPort: 53
-  labels:
 
-# resources:
-#   requests:
-#     memory: 1Gi
-#     cpu: 300m
-
-readinessProbe:
+persistence:
   enabled: true
-livenessProbe:
-  enabled: true
+  storageClass: ""
+  accessMode: ReadWriteOnce
+  size: 1Gi
 
-bindzones:
-  c00lz0ne.internal: |
-      $TTL    604800
-      @       IN      SOA     ns1.c00lz0ne.internal. admin.c00lz0ne.internal. (
-                                    5         ; Serial
-                               604800         ; Refresh
-                                86400         ; Retry
-                              2419200         ; Expire
-                               604800 )       ; Negative Cache TTL
-      ;
-      c00lz0ne.internal.       IN      NS      ns1.c00lz0ne.internal.
-      c00lz0ne.internal.       IN      NS      ns2.c00lz0ne.internal.
-      ns1                      IN      A       10.24.0.11
-      ns2                      IN      A       10.24.0.12
-      rke00.mgr                IN      A       10.24.0.99
-      rke01.mgr                IN      A       10.24.0.100
-      rke-lb.mgr               IN      A       100.69.29.9
+serviceAccount:
+  create: true
 
-bindconfig:
-  named.conf: |
+config:
+  namedConf: |
     options {
-            directory "/var/cache/bind";
-            listen-on port 53 { any; };
-            auth-nxdomain yes;
-            forwarders {
-                    1.1.1.1;
-                    1.0.0.1;
-            };
-            listen-on-v6 { ::1; };
-            allow-recursion {
-                    none;
-            };
-            allow-transfer {
-                    none;
-            };
-            allow-update {
-                    none;
-            };
+      directory "/var/cache/bind";
+      listen-on { any; };
+      allow-query { any; };
+      recursion no;
     };
 
-    zone "c00lz0ne.internal" {
-      type master;
-      file "/var/lib/bind/c00lz0ne.internal";
-    };
+  zoneFiles:
+    examplecomdb: |
+      $TTL    86400
+      @       IN      SOA     ns1.example.com. admin.example.com. (
+                            2024031101
+                            3600
+                            1800
+                            604800
+                            86400 )
+      @       IN      NS      ns1.example.com.
+      ns1     IN      A       10.0.0.1
+      www     IN      A       10.0.0.2
 
-zoneconfigs:
-  items:
-  - key: c00lz0ne.internal
-    path: c00lz0ne.internal
+ingress:
+  enabled: true
+  annotations: {}
+  host: example.com
+  ingressClassName: ""
+  pathType: Prefix
+  path: /
+  
