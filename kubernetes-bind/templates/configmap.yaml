@@ -4,8 +4,8 @@ metadata:
   name: {{ include "bind9.fullname" . }}
   labels:
     {{- include "bind9.labels" . | nindent 4 }}
-data:configma
+data:
   named.conf: |-
-    {{ .Values.config.namedConf | indent 4 }}
+{{ .Values.config.namedConf | indent 4 }}
   example.com.db: |-
-    {{ .Values.config.zoneFiles.examplecomdb | indent 4 }}
+{{ .Values.config.zoneFiles.examplecomdb | indent 4 }}
