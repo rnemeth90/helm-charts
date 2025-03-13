@@ -14,13 +14,13 @@ service:
   targetPort: 53
 
 persistence:
-  enabled: true
+  enabled: false
   storageClass: ""
   accessMode: ReadWriteOnce
   size: 1Gi
 
 serviceAccount:
-  create: true
+  create: false
 
 config:
   namedConf: |
@@ -45,10 +45,5 @@ config:
       www     IN      A       10.0.0.2
 
 ingress:
-  enabled: true
-  annotations: {}
-  host: example.com
-  ingressClassName: ""
-  pathType: Prefix
-  path: /
+  enabled: false
   

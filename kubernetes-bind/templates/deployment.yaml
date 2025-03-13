@@ -26,13 +26,17 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /etc/bind
+        {{ if .Values.persistence.enabled }}
         - name: data-volume
           mountPath: /var/cache/bind
+        {{ end }}
       volumes:
       - name: config-volume
         configMap:
           name: {{ include "bind9.fullname" . }}-config
+      {{ if .Values.persistence.enabled }}
       - name: data-volume
         persistentVolumeClaim:
           claimName: {{ include "bind9.fullname" . }}-pvc
+      {{ end }}
 
