@@ -13,3 +13,16 @@ headlamp:
       - secretName: headlamp-tls
         hosts:
           - headlamp.geekyryan.lan
+  # Persistent long-lived token for the headlamp ServiceAccount so you can log
+  # into the UI. serviceAccount.create + clusterRoleBinding (cluster-admin) are
+  # enabled by default upstream, giving this token full cluster access.
+  extraManifests:
+    - |
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: headlamp-admin-token
+        namespace: {{ include "headlamp.namespace" . }}
+        annotations:
+          kubernetes.io/service-account.name: {{ include "headlamp.serviceAccountName" . }}
+      type: kubernetes.io/service-account-token
