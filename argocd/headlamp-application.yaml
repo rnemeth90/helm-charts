@@ -17,14 +17,14 @@ spec:
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-cloudflare-prod
           hosts:
-            - host: headlamp.geekyryan.com
+            - host: headlamp.geekyryan.lan
               paths:
                 - path: /
                   type: ImplementationSpecific
           tls:
             - secretName: headlamp-tls
               hosts:
-                - headlamp.geekyryan.com
+                - headlamp.geekyryan.lan
   destination:
     server: https://kubernetes.default.svc
     namespace: headlamp
