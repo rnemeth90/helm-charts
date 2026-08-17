@@ -1,0 +1,10 @@
+apiVersion: v2
+name: headlamp
+description: Wrapper chart for Headlamp, pinning our ingress/TLS configuration
+type: application
+version: 0.1.0
+appVersion: "0.44.0"
+dependencies:
+  - name: headlamp
+    version: "*"
+    repository: https://kubernetes-sigs.github.io/headlamp/

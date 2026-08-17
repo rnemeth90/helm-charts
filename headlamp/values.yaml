@@ -1,0 +1,15 @@
+headlamp:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-cloudflare-prod
+    hosts:
+      - host: headlamp.geekyryan.lan
+        paths:
+          - path: /
+            type: ImplementationSpecific
+    tls:
+      - secretName: headlamp-tls
+        hosts:
+          - headlamp.geekyryan.lan

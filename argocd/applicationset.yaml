@@ -29,6 +29,17 @@ spec:
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{.path.basename}}"
+      ignoreDifferences:
+        # This cluster's API server doesn't persist the `hostUsers` PodSpec
+        # field (user-namespace isolation toggle) that the headlamp chart
+        # always sets, causing a perpetual (harmless) diff. Scoped tightly
+        # enough that it's a no-op for every other generated app.
+        - group: apps
+          kind: Deployment
+          name: headlamp
+          namespace: headlamp
+          jqPathExpressions:
+            - .spec.template.spec.hostUsers
       syncPolicy:
         automated:
           prune: true
