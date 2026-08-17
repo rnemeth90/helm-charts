@@ -1,0 +1,10 @@
+apiVersion: v2
+name: prometheus
+description: Wrapper chart for Prometheus, pinning our ingress/TLS configuration
+type: application
+version: 0.1.0
+appVersion: "3.13.2"
+dependencies:
+  - name: prometheus
+    version: "*"
+    repository: https://prometheus-community.github.io/helm-charts

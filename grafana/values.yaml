@@ -1,0 +1,12 @@
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-cloudflare-prod
+    hosts:
+      - grafana.geekyryan.lan
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.geekyryan.lan

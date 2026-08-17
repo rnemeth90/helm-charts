@@ -1,0 +1,13 @@
+prometheus:
+  server:
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-cloudflare-prod
+      hosts:
+        - prometheus.geekyryan.lan
+      tls:
+        - secretName: prometheus-tls
+          hosts:
+            - prometheus.geekyryan.lan
