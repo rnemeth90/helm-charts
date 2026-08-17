@@ -1,0 +1,10 @@
+apiVersion: v2
+name: gitea
+description: Wrapper chart for Gitea, pinning our ingress/TLS configuration
+type: application
+version: 0.1.0
+appVersion: "1.27.0"
+dependencies:
+  - name: gitea
+    version: "*"
+    repository: https://dl.gitea.com/charts/

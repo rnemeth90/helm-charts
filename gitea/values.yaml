@@ -1,0 +1,43 @@
+gitea:
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-cloudflare-prod
+    hosts:
+      - host: &host gitea.geekyryan.lan
+        paths:
+          - path: /
+    tls:
+      - secretName: gitea-tls
+        hosts:
+          - *host
+
+  persistence:
+    enabled: true
+    size: 50Gi
+
+  gitea:
+    config:
+      database:
+        DB_TYPE: sqlite3
+      cache:
+        ADAPTER: memory
+      session:
+        PROVIDER: memory
+      queue:
+        TYPE: level
+      indexer:
+        ISSUE_INDEXER_TYPE: bleve
+
+  # Disable the chart's default bundled HA Postgres and Valkey (Redis) cluster
+  # dependencies so Gitea runs with the built-in SQLite database, matching our
+  # current installation.
+  postgresql:
+    enabled: false
+  postgresql-ha:
+    enabled: false
+  valkey-cluster:
+    enabled: false
+  valkey:
+    enabled: false
