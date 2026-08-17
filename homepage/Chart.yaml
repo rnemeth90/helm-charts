@@ -1,0 +1,10 @@
+apiVersion: v2
+name: homepage
+description: Wrapper chart for Homepage, pinning our ingress/TLS configuration
+type: application
+version: 0.1.0
+appVersion: "v1.2.0"
+dependencies:
+  - name: homepage
+    version: "*"
+    repository: https://jameswynn.github.io/helm-charts

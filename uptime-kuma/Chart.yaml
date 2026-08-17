@@ -1,0 +1,10 @@
+apiVersion: v2
+name: uptime-kuma
+description: Wrapper chart for Uptime Kuma, pinning our ingress/TLS configuration
+type: application
+version: 0.1.0
+appVersion: "2.5.0"
+dependencies:
+  - name: uptime-kuma
+    version: "*"
+    repository: https://dirsigler.github.io/uptime-kuma-helm

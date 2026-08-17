@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "glances.fullname" . }}
+  labels:
+    {{- include "glances.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "glances.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "glances.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: glances
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: GLANCES_OPT
+              value: {{ .Values.glancesOpt | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.hostMounts.enabled }}
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: proc
+              mountPath: /host/proc
+              readOnly: true
+            - name: sys
+              mountPath: /host/sys
+              readOnly: true
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+          {{- end }}
+      {{- if .Values.hostMounts.enabled }}
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
+      {{- end }}

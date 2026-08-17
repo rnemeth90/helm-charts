@@ -1,0 +1,7 @@
+Snake has been deployed!
+
+{{- if .Values.ingress.enabled }}
+Visit https://{{ .Values.ingress.host }} to play.
+{{- else }}
+It is only reachable inside the cluster on port {{ .Values.service.port }} (service type: {{ .Values.service.type }}).
+{{- end }}

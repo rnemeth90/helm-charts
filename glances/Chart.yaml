@@ -1,0 +1,6 @@
+apiVersion: v2
+name: glances
+description: A Helm chart for deploying Glances, a cross-platform system monitoring tool
+type: application
+version: 0.1.0
+appVersion: "latest"

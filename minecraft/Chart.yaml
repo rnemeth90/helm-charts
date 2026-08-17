@@ -1,0 +1,10 @@
+apiVersion: v2
+name: minecraft
+description: Wrapper chart for a Minecraft Java Edition server
+type: application
+version: 0.1.0
+appVersion: "latest"
+dependencies:
+  - name: minecraft
+    version: "*"
+    repository: https://itzg.github.io/minecraft-server-charts

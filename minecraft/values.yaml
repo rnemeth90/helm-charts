@@ -1,0 +1,25 @@
+minecraft:
+  minecraftServer:
+    eula: "TRUE"
+    type: "VANILLA"
+    version: "LATEST"
+    difficulty: normal
+    memory: "2048M"
+    motd: "Welcome to the geekyryan.lan cluster!"
+    # Minecraft speaks raw TCP (not HTTP), so we expose it directly via a
+    # LoadBalancer Service on the LAN instead of going through nginx ingress.
+    serviceType: LoadBalancer
+    servicePort: 25565
+
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2Gi
+    limits:
+      cpu: "2"
+      memory: 3Gi
+
+  persistence:
+    dataDir:
+      enabled: true
+      Size: 8Gi

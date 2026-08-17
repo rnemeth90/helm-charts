@@ -1,0 +1,61 @@
+homepage:
+  ingress:
+    main:
+      enabled: true
+      labels:
+        gethomepage.dev/enabled: "true"
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-cloudflare-prod
+        gethomepage.dev/name: "Homepage"
+        gethomepage.dev/description: "Dashboard for all cluster apps"
+        gethomepage.dev/group: "Cluster"
+        gethomepage.dev/icon: "homepage.png"
+      ingressClassName: nginx
+      hosts:
+        - host: &host homepage.geekyryan.lan
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: homepage-tls
+          hosts:
+            - *host
+
+  config:
+    bookmarks: []
+
+    services:
+      - Monitoring:
+          - Grafana:
+              href: https://grafana.geekyryan.lan
+              description: Dashboards and metrics
+          - Prometheus:
+              href: https://prometheus.geekyryan.lan
+              description: Metrics collection
+          - Uptime Kuma:
+              href: https://uptime-kuma.geekyryan.lan
+              description: Uptime and status monitoring
+
+      - Cluster:
+          - Headlamp:
+              href: https://headlamp.geekyryan.lan
+              description: Kubernetes UI
+          - ArgoCD:
+              href: https://argocd.geekyryan.lan
+              description: GitOps continuous delivery
+
+      - Fun:
+          - CyberChef:
+              href: https://cyberchef.geekyryan.lan
+              description: The Cyber Swiss Army Knife
+          - Glances:
+              href: https://glances.geekyryan.lan
+              description: System monitoring
+          - Snake:
+              href: https://snake.geekyryan.lan
+              description: Classic Snake game
+
+    widgets: []
+
+    kubernetes:
+      mode: cluster

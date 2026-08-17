@@ -1,0 +1,14 @@
+Glances has been deployed!
+
+{{- if .Values.ingress.enabled }}
+Visit https://{{ .Values.ingress.host }} to view the web UI.
+{{- else }}
+It is only reachable inside the cluster on port {{ .Values.service.port }} (service type: {{ .Values.service.type }}).
+{{- end }}
+
+{{- if not .Values.hostMounts.enabled }}
+
+Note: hostMounts.enabled is false, so Glances is only reporting on its own
+pod's resource usage, not the underlying node. Set hostMounts.enabled=true
+(requires a privileged pod) to monitor the host instead.
+{{- end }}
