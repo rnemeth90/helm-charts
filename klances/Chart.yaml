@@ -1,0 +1,10 @@
+apiVersion: v2
+name: klances
+description: Wrapper chart for klances, pinning our ingress/TLS configuration
+type: application
+version: 0.1.0
+appVersion: "0.1.3"
+dependencies:
+  - name: klances
+    version: "*"
+    repository: https://nicolargo.github.io/klances

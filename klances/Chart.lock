@@ -1,0 +1,6 @@
+dependencies:
+- name: klances
+  repository: https://nicolargo.github.io/klances
+  version: 0.1.4
+digest: sha256:2be6a0c361175cdcef74289a67c5e67ea708462afd181909ab0aa99b119c2a16
+generated: "2026-08-30T21:21:09.202435-04:00"

@@ -54,6 +54,9 @@ homepage:
           - Snake:
               href: https://snake.geekyryan.lan
               description: Classic Snake game
+          - klances:
+              href: https://klances.geekyryan.lan
+              description: Read-only Kubernetes dashboard
 
     widgets: []
 

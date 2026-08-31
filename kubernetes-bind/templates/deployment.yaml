@@ -8,20 +8,22 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: bind9
+      {{- include "bind9.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        app: bind9
+        {{- include "bind9.selectorLabels" . | nindent 8 }}
     spec:
       containers:
       - name: bind9
         image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
-        - containerPort: 53
+        - name: dns-udp
+          containerPort: 53
           protocol: UDP
-        - containerPort: 53
+        - name: dns-tcp
+          containerPort: 53
           protocol: TCP
         volumeMounts:
         - name: config-volume

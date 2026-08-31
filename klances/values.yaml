@@ -1,0 +1,15 @@
+klances:
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-cloudflare-prod
+    hosts:
+      - host: &host klances.geekyryan.lan
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: klances-tls
+        hosts:
+          - *host
