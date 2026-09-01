@@ -1,4 +1,18 @@
 grafana:
+  # Provision datasources
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus.geekyryan.lan:9090
+        access: proxy
+        isDefault: true
+      - name: Loki
+        type: loki
+        url: http://loki.geekyryan.lan:3100
+        access: proxy
   # Provision grafana-dashboards-kubernetes
   dashboardProviders:
     dashboardproviders.yaml:
